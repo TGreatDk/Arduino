@@ -3,9 +3,10 @@
         {
             "name": "Win32",
             "includePath": [
-                "C:\\Users\\FrederikJuhl-Hansen\\Documents\\Arduino\\libraries\\DHT_sensor_library",
-                "C:\\\\Users\\\\FrederikJuhl-Hansen\\\\AppData\\\\Local\\\\Arduino15\\\\packages\\\\esp8266\\\\tools\\\\**",
-                "C:\\\\Users\\\\FrederikJuhl-Hansen\\\\AppData\\\\Local\\\\Arduino15\\\\packages\\\\esp8266\\\\hardware\\\\esp8266\\\\2.5.0\\\\**"
+                "C:\\Users\\fjh\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.6.3\\**",
+                "C:\\Users\\fjh\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\**",
+                "C:/Users/fjh/Documents/Arduino/libraries/**",
+                "C:\\Program Files (x86)\\Arduino\\libraries\\**"
             ],
             "forcedInclude": [],
             "intelliSenseMode": "msvc-x64"

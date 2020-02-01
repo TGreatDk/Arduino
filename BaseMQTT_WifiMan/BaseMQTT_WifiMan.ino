@@ -2,11 +2,26 @@
   //needed for library
   #include <DNSServer.h>
   #include <ESP8266WebServer.h>  
+  #include <PubSubClient.h>
 
   #define ESP_getChipId()   (ESP.getChipId())
 
   #define LED_ON      LOW
   #define LED_OFF     HIGH
+
+
+// MQTT config
+#define mqtt_server "hairdresser.cloudmqtt.com"
+#define mqtt_user "your_username"
+#define mqtt_password "your_password"
+#define mqtt_Topic
+WiFiClient espClient;
+PubSubClient client(espClient);
+const char* mqttServer = "hairdresser.cloudmqtt.com";
+const int mqttPort = 18258;
+const char* mqttUser = "drhovasg";
+const char* mqttPassword = "oOj-10IkoqYC";
+
 
 // SSID and PW for Config Portal
 String ssid = "ESP_WiFi" + String(ESP_getChipId(), HEX);
@@ -83,6 +98,21 @@ void check_status()
     heartBeatPrint();
     checkstatus_timeout = millis() + HEARTBEAT_INTERVAL;
   }
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+ 
+  Serial.print("Message arrived in topic: ");
+  Serial.println(topic);
+ 
+  Serial.print("Message:");
+  for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
+  }
+ 
+  Serial.println();
+  Serial.println("-----------------------");
+ 
 }
 
 void setup() 
@@ -190,6 +220,24 @@ void setup()
   }
   else
     Serial.println(ESP_wifiManager.getStatus(WiFi.status()));
+
+  // Setup MQTT client
+  client.setServer(mqttServer,mqttPort);
+  client.setCallback(callback);
+
+   while (!client.connected()) {
+    Serial.println("Connecting to MQTT...");
+ 
+    if (client.connect("ESP8266Client", mqttUser, mqttPassword )) { 
+      Serial.println("connected");   
+    } else { 
+      Serial.print("failed with state ");
+      Serial.print(client.state());
+      delay(2000); 
+    }
+  } 
+  client.publish("esp/test", "hello"); //Topic name
+  client.subscribe("esp/test");
 }
 
 void loop() 
@@ -202,5 +250,5 @@ void loop()
 
   // put your main code here, to run repeatedly
   check_status();
-  
+  client.loop();    
 }
