@@ -4,8 +4,8 @@
 #include <ArduinoOTA.h>
 
 #ifndef STASSID
-#define STASSID "hera"
-#define STAPSK  "supet2730"
+#define STASSID "Hera"
+#define STAPSK  "super2730"
 #endif
 
 const char* ssid = STASSID;
