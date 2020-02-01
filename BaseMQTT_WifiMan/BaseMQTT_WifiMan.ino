@@ -11,16 +11,14 @@
 
 
 // MQTT config
-#define mqtt_server "hairdresser.cloudmqtt.com"
-#define mqtt_user "your_username"
-#define mqtt_password "your_password"
-#define mqtt_Topic
+
 WiFiClient espClient;
 PubSubClient client(espClient);
 const char* mqttServer = "hairdresser.cloudmqtt.com";
 const int mqttPort = 18258;
 const char* mqttUser = "drhovasg";
 const char* mqttPassword = "oOj-10IkoqYC";
+const char* mqttTopic = "esp/test";
 
 
 // SSID and PW for Config Portal
@@ -236,8 +234,8 @@ void setup()
       delay(2000); 
     }
   } 
-  client.publish("esp/test", "hello"); //Topic name
-  client.subscribe("esp/test");
+  client.publish(mqttTopic, "hello"); //Topic name
+  client.subscribe(mqttTopci);
 }
 
 void loop() 
