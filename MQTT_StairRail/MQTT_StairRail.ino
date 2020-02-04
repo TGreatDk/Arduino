@@ -3,24 +3,6 @@
   #include <DNSServer.h>
   #include <ESP8266WebServer.h>  
   #include <PubSubClient.h>
-  #include <FastLED.h>
-  #include <ArduinoJson.h>
-
-
-//Sample JSON Object
-//{
-//  "red": 0,
-//  "green": 200,
-//  "blue": 0,
-//  "delay": 50
-//}
-// https://arduinojson.org/v6/assistant/ used for size
-
-
-//Setup fastLED
-  #define NUM_LEDS    64
-  CRGB leds[NUM_LEDS];
-  uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 
   #define ESP_getChipId()   (ESP.getChipId())
 
@@ -28,14 +10,15 @@
   #define LED_OFF     HIGH
 
 
-//MQTT Config
+// MQTT config
+
 WiFiClient espClient;
 PubSubClient client(espClient);
 const char* mqttServer = "hairdresser.cloudmqtt.com";
 const int mqttPort = 18258;
 const char* mqttUser = "drhovasg";
 const char* mqttPassword = "oOj-10IkoqYC";
-const char* mqttTopic = "esp/test/pingpong";
+const char* mqttTopic = "esp/test";
 
 
 // SSID and PW for Config Portal
@@ -115,35 +98,17 @@ void check_status()
   }
 }
 
-CRGB ActiveColor = CRGB::Yellow;
-
 void callback(char* topic, byte* payload, unsigned int length) {
-
  
   Serial.print("Message arrived in topic: ");
-  Serial.println(topic); 
+  Serial.println(topic);
+ 
   Serial.print("Message:");
   for (int i = 0; i < length; i++) {
     Serial.print((char)payload[i]);
   }
-//    //Assume json! 
-
-  const size_t capacity = JSON_OBJECT_SIZE(4) + 30;
-DynamicJsonDocument doc(capacity);
-
-deserializeJson(doc, (char*)payload);
-
-  int red = doc["red"]; // 256
-  int green = doc["green"]; // 156
-  int blue = doc["blue"]; // 153
-  int delayed = doc["delayed"]; // 500
-  Serial.println(red);
-  Serial.println(green);
-  Serial.println(blue);
-  leds[0] = CRGB(red,green,blue);
-  FastLED.show();
-  
-  Serial.println(); 
+ 
+  Serial.println();
   Serial.println("-----------------------");
  
 }
@@ -269,16 +234,12 @@ void setup()
       delay(2000); 
     }
   } 
-  //client.publish(mqttTopic, "hello"); //Topic name
-  client.subscribe(mqttTopic);
-
-  Serial.println(mqttTopic);
-
-  FastLED.addLeds<NEOPIXEL,D2>(leds,NUM_LEDS);
+  client.publish(mqttTopic, "hello"); //Topic name
+  client.subscribe(mqttTopci);
 }
 
 void loop() 
-{  
+{
   // Call the double reset detector loop method every so often,
   // so that it can recognise when the timeout expires.
   // You can also call drd.stop() when you wish to no longer
@@ -288,5 +249,4 @@ void loop()
   // put your main code here, to run repeatedly
   check_status();
   client.loop();    
-  
 }
